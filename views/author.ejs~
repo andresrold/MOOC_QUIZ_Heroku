@@ -1,0 +1,4 @@
+<h1><%= title %></h1>
+<img src="/images/mordisquitos.jpg" width="100px"/>
+
+<p>¡El portal donde podrá crear sus propios juegos!</p>

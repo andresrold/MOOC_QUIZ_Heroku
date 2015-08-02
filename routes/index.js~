@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/author', function(req, res) {
-  res.render('author', { title: 'Quiz' });
+  res.render('author', { title: 'Andrés Roldán' });
 });
 
 router.get('/quizes/question', quizController.question);

@@ -5,11 +5,11 @@ var quizController = require('../controllers/quiz_controller');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Quiz' });
+  res.render('index', { title: 'Quiz', errors: [] });
 });
 
 router.get('/author', function(req, res) {
-  res.render('author', { title: 'Andrés Roldán' });
+  res.render('author', { title: 'Andrés Roldán', errors: []});
 });
 
 // Autoload si viene el parámetro quizId

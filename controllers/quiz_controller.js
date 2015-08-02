@@ -19,12 +19,12 @@ exports.index = function(req, res) {
     if(req.query.search != null) {
         var search = "%" + req.query.search.replace(" ", "%") + "%";
         models.Quiz.findAll({where: ["pregunta like ?", search]}).then(function(quizes) {
-		res.render('quizes/index', { quizes: quizes});
+		res.render('quizes/index', { quizes: quizes, errors: []});
 	    }
         ).catch(function(error){ next(error); });
     } else {
 	models.Quiz.findAll().then(function(quizes) {
-		res.render('quizes/index', { quizes: quizes});
+		res.render('quizes/index', { quizes: quizes, errors: []});
 	    }
         ).catch(function(error){ next(error); });
     }
@@ -32,15 +32,15 @@ exports.index = function(req, res) {
 
 // GET /quizes/:id
 exports.show = function(req, res) {
-	res.render('quizes/show', { quiz: req.quiz});    
+	res.render('quizes/show', { quiz: req.quiz, errors: []});    
 };
 
 // GET /quizes/answer
 exports.answer = function(req, res) {
     if(req.query.respuesta === req.quiz.respuesta) {
-        res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Correcto'});
+        res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Correcto', errors: []});
     } else {
-    	res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto'});
+    	res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors: []});
     }
 };
 
@@ -50,15 +50,25 @@ exports.new = function(req, res) {
         { pregunta: "Pregunta", respuesta: "Respuesta" }
     );
 
-    res.render('quizes/new', {quiz: quiz});
+    res.render('quizes/new', {quiz: quiz, errors: []});
 };
 // POST /quizes/create
 exports.create = function(req, res) {
     var quiz = models.Quiz.build( req.body.quiz );
-    quiz.save(
-        {fields: ["pregunta", "respuesta"]
-    }).then(function() {
-        res.redirect('/quizes');
+    
+    quiz
+    .validate()
+    .then(function(error) {
+        if(error) {
+            res.render('quizes/new', {quiz: quiz, errors: error.errors});
+        } else {
+            quiz.save(
+                {fields: ["pregunta", "respuesta"]
+            }).then(function() {
+                res.redirect('/quizes');
+            });
+        }
     });
+    
 };
 

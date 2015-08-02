@@ -71,4 +71,31 @@ exports.create = function(req, res) {
     });
     
 };
+// GET /quizes/:id/edit
+exports.edit = function(req, res) {
+   var quiz = req.quiz; // Tomará quiz precargado del autoload
+
+    res.render('quizes/edit', {quiz: quiz, errors: []});
+};
+// PUT /quizes/:id
+exports.update = function (req, res) {
+    // Lo primero es asignar al elemento quiz del autoload, los valores que nos vienen del formulario
+    req.quiz.pregunta = req.body.quiz.pregunta;
+    req.quiz.respuesta = req.body.quiz.respuesta;
+    // Hacemos validación y actualizado en su caso
+    req.quiz
+    .validate()
+    .then(function(error) {
+        if(error) {
+            res.render('quizes/edit', {quiz: req.quiz, errors: error.errors});
+        } else {
+            req.quiz.save(
+                {fields: ["pregunta", "respuesta"]
+            }).then(function() {
+                res.redirect('/quizes');
+            });
+        }
+    });
+
+}
 

@@ -47,7 +47,7 @@ exports.answer = function(req, res) {
 // GET /quizes/new
 exports.new = function(req, res) {
     var quiz = models.Quiz.build( // crea un objeto Quiz
-        { pregunta: "Pregunta", respuesta: "Respuesta" }
+        { pregunta: "Pregunta", respuesta: "Respuesta", tema: "otro" }
     );
 
     res.render('quizes/new', {quiz: quiz, errors: []});
@@ -63,7 +63,7 @@ exports.create = function(req, res) {
             res.render('quizes/new', {quiz: quiz, errors: error.errors});
         } else {
             quiz.save(
-                {fields: ["pregunta", "respuesta"]
+                {fields: ["pregunta", "respuesta", "tema"]
             }).then(function() {
                 res.redirect('/quizes');
             });
@@ -82,6 +82,7 @@ exports.update = function (req, res) {
     // Lo primero es asignar al elemento quiz del autoload, los valores que nos vienen del formulario
     req.quiz.pregunta = req.body.quiz.pregunta;
     req.quiz.respuesta = req.body.quiz.respuesta;
+    req.quiz.tema = req.body.quiz.tema;
     // Hacemos validación y actualizado en su caso
     req.quiz
     .validate()
@@ -90,7 +91,7 @@ exports.update = function (req, res) {
             res.render('quizes/edit', {quiz: req.quiz, errors: error.errors});
         } else {
             req.quiz.save(
-                {fields: ["pregunta", "respuesta"]
+                {fields: ["pregunta", "respuesta", "tema"]
             }).then(function() {
                 res.redirect('/quizes');
             });

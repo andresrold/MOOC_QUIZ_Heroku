@@ -3,7 +3,7 @@ var router = express.Router();
 
 var quizController = require('../controllers/quiz_controller');
 var commentController = require('../controllers/comment_controller');
-var userController = require('../controllers/user_controller');
+var sessionController = require('../controllers/session_controller');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -33,8 +33,8 @@ router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
 router.post('/quizes/:quizId(\\d+)/comments', commentController.create);
 
 // Control de usuarios
-router.get('/login', userController.new);
-router.post('/login', userController.create);
-router.get('/logout', userController.destroy);
+router.get('/login', sessionController.new);
+router.post('/login', sessionController.create);
+router.get('/logout', sessionController.destroy);
 
 module.exports = router;

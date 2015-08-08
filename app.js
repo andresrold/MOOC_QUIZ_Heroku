@@ -27,6 +27,21 @@ app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Auto-logout
+app.use(function(req, res, next) {
+    if(req.session.user) {
+        if(req.session.timeSession) {
+            var now = Date.now();
+	    var diff = now - req.session.timeSession;
+	    if(diff >= 1200000) {
+	        delete req.session.user;
+            }
+        }
+        req.session.timeSession = Date.now();
+    }
+    next();
+});
+
 // User session middleware
 app.use(function(req, res, next) {
     if(!req.path.match(/\/login|\/logout/)) {

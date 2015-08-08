@@ -27,6 +27,29 @@ app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Auto-logout
+app.use(function(req, res, next) {
+    if(req.session.timeSession) {
+        var now = Date.now();
+	var diff = now - req.session.timeSession;
+	if(diff >= 1200000) {
+	    delete req.session.user;
+	}
+    }
+    req.session.timeSession = Date.now();
+    next();
+});
+
+// User session middleware
+app.use(function(req, res, next) {
+    if(!req.path.match(/\/login|\/logout/)) {
+        req.session.redir = req.path;
+    };
+    //Hacemos visible en las vistas la info de session
+    res.locals.session = req.session;
+    next();
+});
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
@@ -58,16 +81,6 @@ app.use(function(err, req, res, next) {
         message: err.message,
         error: {}, errors: []
     });
-});
-
-// User session middleware
-app.use(function(req, res, next) {
-    if(!req.path.match(/\/login|\/logout/)) {
-        req.session.redir = req.path;
-    };
-    //Hacemos visible en las vistas la info de session
-    res.locals.session = req.session;
-    next();
 });
 
 module.exports = app;

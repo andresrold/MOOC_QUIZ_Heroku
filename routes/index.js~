@@ -16,6 +16,8 @@ router.get('/author', function(req, res) {
 
 // Autoload si viene el parámetro quizId
 router.param('quizId', quizController.load);
+// Autoload si viene el parámetro commentId
+router.param('commentId', commentController.load);
 
 // Definición de rutas de quizes
 router.get('/quizes', quizController.index);
@@ -31,6 +33,7 @@ router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizCont
 // CRUD de comments
 router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
 router.post('/quizes/:quizId(\\d+)/comments', commentController.create);
+router.get('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish', sessionController.loginRequired, commentController.publish);
 
 // Control de usuarios
 router.get('/login', sessionController.new);

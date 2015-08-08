@@ -1,18 +1,18 @@
 // Definición del modelo de QUIZ, Base de datos
 
-module.exports = function(sequelize, DataType) {
+module.exports = function(sequelize, DataTypes) {
     return sequelize.define(
         'Quiz',
         { pregunta:
-            { type: DataType.STRING,
+            { type: DataTypes.STRING,
               validate: { notEmpty: {msg: "-> Falta la pregunta"}}
             },
           respuesta:
-            { type: DataType.STRING,
+            { type: DataTypes.STRING,
               validate: { notEmpty: {msg: "-> Falta la respuesta"}}
             },
           tema:
-            { type: DataType.STRING,
+            { type: DataTypes.STRING,
               validate: { notEmpty: {msg: "-> Falta el tema"}}
             }
         }
